@@ -39,7 +39,7 @@ packages:
       path: "../flutter_aws_request"
       relative: true
     source: path
-    version: "1.0.1"
+    version: "1.1.0"
   boolean_selector:
     dependency: transitive
     description:
