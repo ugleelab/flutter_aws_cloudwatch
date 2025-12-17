@@ -9,16 +9,10 @@ class CloudWatchLog {
   int messageSize = 0;
 
   /// Constructor for a LogObject
-  CloudWatchLog({
-    required this.logs,
-    required this.messageSize,
-  });
+  CloudWatchLog({required this.logs, required this.messageSize});
 
   /// Appends [log] to [logs] and increases [messagesSize] by [size]
-  void addLog({
-    required Map<String, dynamic> log,
-    required int size,
-  }) {
+  void addLog({required Map<String, dynamic> log, required int size}) {
     logs.add(log);
     messageSize += size;
   }

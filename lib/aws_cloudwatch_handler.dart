@@ -117,22 +117,22 @@ class CloudWatchHandler {
     int maxBytesPerRequest = awsMaxBytesPerRequest,
     int maxMessagesPerRequest = awsMaxMessagesPerRequest,
   }) : _handler = LoggerHandler(
-          awsAccessKey: awsAccessKey,
-          awsSecretKey: awsSecretKey,
-          region: region,
-          awsSessionToken: awsSessionToken,
-          delay: delay,
-          requestTimeout: requestTimeout,
-          useDynamicTimeout: useDynamicTimeout,
-          timeoutMultiplier: timeoutMultiplier,
-          dynamicTimeoutMax: dynamicTimeoutMax,
-          retries: retries,
-          largeMessageBehavior: largeMessageBehavior,
-          raiseFailedLookups: raiseFailedLookups,
-          maxBytesPerMessage: maxBytesPerMessage,
-          maxBytesPerRequest: maxBytesPerRequest,
-          maxMessagesPerRequest: maxMessagesPerRequest,
-        );
+         awsAccessKey: awsAccessKey,
+         awsSecretKey: awsSecretKey,
+         region: region,
+         awsSessionToken: awsSessionToken,
+         delay: delay,
+         requestTimeout: requestTimeout,
+         useDynamicTimeout: useDynamicTimeout,
+         timeoutMultiplier: timeoutMultiplier,
+         dynamicTimeoutMax: dynamicTimeoutMax,
+         retries: retries,
+         largeMessageBehavior: largeMessageBehavior,
+         raiseFailedLookups: raiseFailedLookups,
+         maxBytesPerMessage: maxBytesPerMessage,
+         maxBytesPerRequest: maxBytesPerRequest,
+         maxMessagesPerRequest: maxMessagesPerRequest,
+       );
 
   /// Returns a specific instance of a CloudWatch class (or null if it doesn't
   /// exist) based on group name and stream name

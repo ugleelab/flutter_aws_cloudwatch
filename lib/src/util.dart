@@ -69,22 +69,14 @@ class CloudWatchException implements Exception {
 ///
 /// Throws [CloudWatchException] if bad name is found
 void validateLogStreamName(String streamName) {
-  validateName(
-    streamName,
-    'streamName',
-    streamNameRegexPattern,
-  );
+  validateName(streamName, 'streamName', streamNameRegexPattern);
 }
 
 /// Validates [groupName] based on aws restrictions
 ///
 /// Throws [CloudWatchException] if bad name is found
 void validateLogGroupName(String groupName) {
-  validateName(
-    groupName,
-    'groupName',
-    groupNameRegexPattern,
-  );
+  validateName(groupName, 'groupName', groupNameRegexPattern);
 }
 
 /// Validates [name] to have a regex match with [pattern] and checks length requirements
@@ -120,9 +112,7 @@ class AwsResponse {
   static Future<AwsResponse> parseResponse(Response response) async {
     final AwsResponse result = AwsResponse._(response.statusCode);
     if (response.contentLength != null && response.contentLength! > 0) {
-      final Map<String, dynamic>? reply = jsonDecode(
-        response.body,
-      );
+      final Map<String, dynamic>? reply = jsonDecode(response.body);
       result.raw = reply.toString();
       if (reply != null) {
         if (reply.containsKey('nextSequenceToken')) {
@@ -145,8 +135,9 @@ class AwsResponse {
   /// AwsResponse toString
   @override
   String toString() {
-    final StringBuffer sb =
-        StringBuffer('AwsResponse - statusCode: $statusCode');
+    final StringBuffer sb = StringBuffer(
+      'AwsResponse - statusCode: $statusCode',
+    );
     if (type != null) {
       sb.write(', type: $type');
     }

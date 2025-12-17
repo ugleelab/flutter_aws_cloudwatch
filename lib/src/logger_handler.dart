@@ -242,20 +242,20 @@ class LoggerHandler {
     int maxBytesPerMessage = awsMaxBytesPerMessage,
     int maxBytesPerRequest = awsMaxBytesPerRequest,
     int maxMessagesPerRequest = awsMaxMessagesPerRequest,
-  })  : _awsAccessKey = awsAccessKey,
-        _awsSecretKey = awsSecretKey,
-        _awsSessionToken = awsSessionToken,
-        _delay = delay,
-        _requestTimeout = requestTimeout,
-        _useDynamicTimeout = useDynamicTimeout,
-        _dynamicTimeoutMax = dynamicTimeoutMax,
-        _timeoutMultiplier = timeoutMultiplier,
-        _retries = max(0, retries),
-        _largeMessageBehavior = largeMessageBehavior,
-        _raiseFailedLookups = raiseFailedLookups,
-        _maxBytesPerMessage = maxBytesPerMessage,
-        _maxBytesPerRequest = maxBytesPerRequest,
-        _maxMessagesPerRequest = maxMessagesPerRequest;
+  }) : _awsAccessKey = awsAccessKey,
+       _awsSecretKey = awsSecretKey,
+       _awsSessionToken = awsSessionToken,
+       _delay = delay,
+       _requestTimeout = requestTimeout,
+       _useDynamicTimeout = useDynamicTimeout,
+       _dynamicTimeoutMax = dynamicTimeoutMax,
+       _timeoutMultiplier = timeoutMultiplier,
+       _retries = max(0, retries),
+       _largeMessageBehavior = largeMessageBehavior,
+       _raiseFailedLookups = raiseFailedLookups,
+       _maxBytesPerMessage = maxBytesPerMessage,
+       _maxBytesPerRequest = maxBytesPerRequest,
+       _maxMessagesPerRequest = maxMessagesPerRequest;
 
   /// Returns a specific instance of a CloudWatch class (or null if it doesn't
   /// exist) based on group name and stream name
@@ -295,10 +295,8 @@ class LoggerHandler {
     required String logGroupName,
     required String logStreamName,
   }) async {
-    final Logger instance = getInstance(
-          logGroupName: logGroupName,
-          logStreamName: logStreamName,
-        ) ??
+    final Logger instance =
+        getInstance(logGroupName: logGroupName, logStreamName: logStreamName) ??
         createInstance(
           logGroupName: logGroupName,
           logStreamName: logStreamName,

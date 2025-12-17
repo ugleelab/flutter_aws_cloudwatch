@@ -108,10 +108,7 @@ class Logger {
     int newLevel = min(level, 3);
     newLevel = max(newLevel, 0);
     _verbosity = newLevel;
-    debugPrint(
-      2,
-      'CloudWatch INFO: Set verbosity to $verbosity',
-    );
+    debugPrint(2, 'CloudWatch INFO: Set verbosity to $verbosity');
   }
 
   int get verbosity => _verbosity;
@@ -219,21 +216,22 @@ class Logger {
     int maxMessagesPerRequest = awsMaxMessagesPerRequest,
     this.mockCloudWatch = false,
     this.mockFunction,
-  })  : _dynamicTimeoutMax = !dynamicTimeoutMax.isNegative
-            ? dynamicTimeoutMax
-            : const Duration(),
-        _timeoutMultiplier = max(timeoutMultiplier, 1),
-        _largeMessageBehavior = largeMessageBehavior,
-        _delay = !delay.isNegative ? delay : const Duration(),
-        _requestTimeout =
-            !requestTimeout.isNegative ? requestTimeout : const Duration(),
-        _retries = max(0, retries),
-        logStack = CloudWatchLogStack(
-          largeMessageBehavior: largeMessageBehavior,
-          maxBytesPerMessage: maxBytesPerMessage,
-          maxBytesPerRequest: maxBytesPerRequest,
-          maxMessagesPerRequest: maxMessagesPerRequest,
-        ) {
+  }) : _dynamicTimeoutMax = !dynamicTimeoutMax.isNegative
+           ? dynamicTimeoutMax
+           : const Duration(),
+       _timeoutMultiplier = max(timeoutMultiplier, 1),
+       _largeMessageBehavior = largeMessageBehavior,
+       _delay = !delay.isNegative ? delay : const Duration(),
+       _requestTimeout = !requestTimeout.isNegative
+           ? requestTimeout
+           : const Duration(),
+       _retries = max(0, retries),
+       logStack = CloudWatchLogStack(
+         largeMessageBehavior: largeMessageBehavior,
+         maxBytesPerMessage: maxBytesPerMessage,
+         maxBytesPerRequest: maxBytesPerRequest,
+         maxMessagesPerRequest: maxMessagesPerRequest,
+       ) {
     validateLogGroupName(groupName);
     validateLogStreamName(streamName);
   }
@@ -279,10 +277,7 @@ class Logger {
   }) async {
     final bool isLogGroup = type == 'LogGroup';
     if (!(isLogGroup ? logGroupCreated : logStreamCreated)) {
-      debugPrint(
-        2,
-        'CloudWatch INFO: creating $type Exists',
-      );
+      debugPrint(2, 'CloudWatch INFO: creating $type Exists');
       if (isLogGroup) {
         logGroupCreated = true;
       } else {
@@ -290,10 +285,7 @@ class Logger {
       }
       Response result;
       try {
-        result = await sendRequest(
-          body: body,
-          target: target,
-        );
+        result = await sendRequest(body: body, target: target);
       } catch (e) {
         if (isLogGroup) {
           logGroupCreated = false;
@@ -303,16 +295,10 @@ class Logger {
         rethrow;
       }
       final int statusCode = result.statusCode;
-      debugPrint(
-        1,
-        'CloudWatch Info: $type creation status code: $statusCode',
-      );
+      debugPrint(1, 'CloudWatch Info: $type creation status code: $statusCode');
       if (statusCode != 200) {
         final AwsResponse response = await AwsResponse.parseResponse(result);
-        debugPrint(
-          0,
-          'CloudWatch ERROR: $response',
-        );
+        debugPrint(0, 'CloudWatch ERROR: $response');
         // Just move on if the resource already exists
         if (response.type != 'ResourceAlreadyExistsException') {
           if (isLogGroup) {
@@ -329,19 +315,13 @@ class Logger {
           );
         }
       }
-      debugPrint(
-        2,
-        'CloudWatch INFO: created $type',
-      );
+      debugPrint(2, 'CloudWatch INFO: created $type');
     }
   }
 
   /// Creates a json log events string and adds the sequence token if available
   String createBody(List<Map<String, dynamic>> logsToSend) {
-    debugPrint(
-      2,
-      'CloudWatch INFO: Generating CloudWatch request body',
-    );
+    debugPrint(2, 'CloudWatch INFO: Generating CloudWatch request body');
     final Map<String, dynamic> body = {
       'logEvents': logsToSend,
       'logGroupName': groupName,
@@ -349,10 +329,7 @@ class Logger {
     };
     if (sequenceToken != null) {
       body['sequenceToken'] = sequenceToken;
-      debugPrint(
-        2,
-        'CloudWatch INFO: Adding sequence token',
-      );
+      debugPrint(2, 'CloudWatch INFO: Adding sequence token');
     }
     final String jsonBody = jsonEncode(body);
     debugPrint(
@@ -365,10 +342,7 @@ class Logger {
   /// Sets up log stream / group and then queues logs to be sent
   Future<void> log(List<String> logStrings) async {
     logStack.addLogs(logStrings);
-    debugPrint(
-      2,
-      'CloudWatch INFO: Added messages to log stack',
-    );
+    debugPrint(2, 'CloudWatch INFO: Added messages to log stack');
     dynamic error;
     try {
       await sendAllLogs();
@@ -436,9 +410,7 @@ class Logger {
   /// Queues [sendLogs] until all logs are sent or error occurs
   Future<void> sendAllLogs() async {
     while (logStack.length > 0) {
-      await Future.delayed(
-        delay,
-      );
+      await Future.delayed(delay);
       await lock.synchronized(sendLogs);
     }
   }
@@ -447,10 +419,7 @@ class Logger {
   Future<void> sendLogs() async {
     if (logStack.length <= 0) {
       // logs already sent while this request was waiting for lock
-      debugPrint(
-        2,
-        'CloudWatch INFO: All logs have already been sent',
-      );
+      debugPrint(2, 'CloudWatch INFO: All logs have already been sent');
       return;
     }
     // capture logs that are about to be sent in case the request fails
@@ -476,10 +445,7 @@ class Logger {
     if (!success) {
       // prepend logs in event of failure
       logStack.prepend(_logs);
-      debugPrint(
-        0,
-        'CloudWatch ERROR: Failed to send logs',
-      );
+      debugPrint(0, 'CloudWatch ERROR: Failed to send logs');
       if (error != null) {
         throw error;
       }
@@ -530,25 +496,17 @@ class Logger {
   /// Handles the [response] from the cloudwatch api.
   ///
   /// Returns whether or not the call was successful
-  Future<bool> handleResponse(
-    Response response,
-  ) async {
+  Future<bool> handleResponse(Response response) async {
     final AwsResponse awsResponse = await AwsResponse.parseResponse(response);
     if (awsResponse.statusCode == 200) {
-      debugPrint(
-        1,
-        'CloudWatch Info: $awsResponse',
-      );
+      debugPrint(1, 'CloudWatch Info: $awsResponse');
       sequenceToken = awsResponse.nextSequenceToken;
       return true;
     } else {
       if (awsResponse.type != null) {
         return handleError(awsResponse);
       }
-      debugPrint(
-        0,
-        'CloudWatch ERROR: $awsResponse',
-      );
+      debugPrint(0, 'CloudWatch ERROR: $awsResponse');
       // failed for unknown reason. Throw error
       throw CloudWatchException(
         message: awsResponse.message,
@@ -580,10 +538,7 @@ class Logger {
       // LogStream not present
       // Sometimes happens with debuggers / hot reloads
       // Attempt to recover
-      debugPrint(
-        0,
-        "CloudWatch Info: Log Stream doesn't Exist",
-      );
+      debugPrint(0, "CloudWatch Info: Log Stream doesn't Exist");
       logStreamCreated = false;
       await createLogStream();
       return false;
@@ -592,10 +547,7 @@ class Logger {
       // LogGroup not present
       // Sometimes happens with debuggers / hot reloads
       // Attempt to recover
-      debugPrint(
-        0,
-        "CloudWatch Info: Log Group doesn't Exist",
-      );
+      debugPrint(0, "CloudWatch Info: Log Group doesn't Exist");
       logGroupCreated = false;
       await createLogGroup();
       return false;
@@ -604,19 +556,13 @@ class Logger {
       // Sometimes happens with debuggers / hot reloads
       // Update the sequence token just in case.
       // A previous request was already successful => return true
-      debugPrint(
-        0,
-        'CloudWatch Info: Data Already Sent',
-      );
+      debugPrint(0, 'CloudWatch Info: Data Already Sent');
       sequenceToken = awsResponse.expectedSequenceToken;
       return true;
     } else if (awsResponse.type == 'InvalidParameterException') {
       // If this is hit its probably a bug! Please report it!
       // Usually these arent recoverable unfortunately
-      debugPrint(
-        0,
-        'CloudWatch Info: InvalidParameterException! ',
-      );
+      debugPrint(0, 'CloudWatch Info: InvalidParameterException! ');
       throw CloudWatchException(
         message:
             'An InvalidParameterException occurred! This is probably a bug! '

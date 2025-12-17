@@ -25,10 +25,10 @@ class CloudWatchLogStack {
   int get maxBytesPerMessage => _maxBytesPerMessage;
 
   set maxBytesPerMessage(int val) => _maxBytesPerMessage = boundValue(
-        val: val,
-        maxVal: awsMaxBytesPerMessage,
-        minVal: awsMinBytesPerMessage,
-      );
+    val: val,
+    maxVal: awsMaxBytesPerMessage,
+    minVal: awsMinBytesPerMessage,
+  );
 
   /// private maxBytesPerMessage
   int _maxBytesPerMessage;
@@ -41,10 +41,10 @@ class CloudWatchLogStack {
   int get maxBytesPerRequest => _maxBytesPerRequest;
 
   set maxBytesPerRequest(int val) => _maxBytesPerRequest = boundValue(
-        val: val,
-        maxVal: awsMaxBytesPerRequest,
-        minVal: awsMinBytesPerRequest,
-      );
+    val: val,
+    maxVal: awsMaxBytesPerRequest,
+    minVal: awsMinBytesPerRequest,
+  );
 
   /// private maxBytesPerRequest
   int _maxBytesPerRequest;
@@ -57,10 +57,10 @@ class CloudWatchLogStack {
   int get maxMessagesPerRequest => _maxMessagesPerRequest;
 
   set maxMessagesPerRequest(int val) => _maxMessagesPerRequest = boundValue(
-        val: val,
-        maxVal: awsMaxMessagesPerRequest,
-        minVal: awsMinMessagesPerRequest,
-      );
+    val: val,
+    maxVal: awsMaxMessagesPerRequest,
+    minVal: awsMinMessagesPerRequest,
+  );
 
   /// private maxMessagesPerRequest
   int _maxMessagesPerRequest;
@@ -71,21 +71,21 @@ class CloudWatchLogStack {
     int maxBytesPerMessage = awsMaxBytesPerMessage,
     int maxBytesPerRequest = awsMaxBytesPerRequest,
     int maxMessagesPerRequest = awsMaxMessagesPerRequest,
-  })  : _maxBytesPerMessage = boundValue(
-          val: maxBytesPerMessage,
-          maxVal: awsMaxBytesPerMessage,
-          minVal: awsMinBytesPerMessage,
-        ),
-        _maxBytesPerRequest = boundValue(
-          val: maxBytesPerRequest,
-          maxVal: awsMaxBytesPerRequest,
-          minVal: awsMinBytesPerRequest,
-        ),
-        _maxMessagesPerRequest = boundValue(
-          val: maxMessagesPerRequest,
-          maxVal: awsMaxMessagesPerRequest,
-          minVal: awsMinMessagesPerRequest,
-        );
+  }) : _maxBytesPerMessage = boundValue(
+         val: maxBytesPerMessage,
+         maxVal: awsMaxBytesPerMessage,
+         minVal: awsMinBytesPerMessage,
+       ),
+       _maxBytesPerRequest = boundValue(
+         val: maxBytesPerRequest,
+         maxVal: awsMaxBytesPerRequest,
+         minVal: awsMinBytesPerRequest,
+       ),
+       _maxMessagesPerRequest = boundValue(
+         val: maxMessagesPerRequest,
+         maxVal: awsMaxMessagesPerRequest,
+         minVal: awsMinMessagesPerRequest,
+       );
 
   /// The stack of logs that holds pre-split CloudWatchLogs
   List<CloudWatchLog> logStack = [];
@@ -145,8 +145,9 @@ class CloudWatchLogStack {
     // plus 3 to account for "..."
     final double toRemove = (bytes.length + 3 - maxBytesPerMessage) / 2;
     final int toRemoveFront = toRemove.ceil();
-    final int toRemoveBack =
-        toRemove % 1 == 0 ? toRemove.ceil() : toRemove.floor();
+    final int toRemoveBack = toRemove % 1 == 0
+        ? toRemove.ceil()
+        : toRemove.floor();
     final int midPoint = (bytes.length / 2).floor();
     return bytes.sublist(0, midPoint - toRemoveFront) +
         // "..." in bytes (2e)
@@ -161,8 +162,10 @@ class CloudWatchLogStack {
 
     final int timestamp = DateTime.now().millisecondsSinceEpoch;
     // grab first 10 of hash. used to collate messages
-    final String hash =
-        sha1.convert(bytes + [timestamp]).toString().substring(0, 10);
+    final String hash = sha1
+        .convert(bytes + [timestamp])
+        .toString()
+        .substring(0, 10);
     final List<List<int>> res = [];
     final String paddedTotal = numMessages.toString().padLeft(4, '0');
     int startIndex = 0;
