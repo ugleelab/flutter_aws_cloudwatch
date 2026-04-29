@@ -6,13 +6,15 @@ publish_to: none
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
+resolution: workspace
 
 dependencies:
   aws_request:
     path: "../flutter_aws_request"
-  synchronized: ^3.0.0 # Synchronize requests to ensure valid keys
+  synchronized: ^3.3.1 # Synchronize requests to ensure valid keys
   http: ^1.0.0 # Http package for parsing AWS responses correctly on Multiple Platforms
   crypto: ^3.0.0 # Message hashes used to collate split messages
 
 dev_dependencies:
-  test: ^1.24.0
+  # test 의존성은 워크스페이스 호환성을 위해 제거. 필요시 로컬에서 추가하여 사용.
+  # test: ^1.24.0
