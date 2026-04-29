@@ -6,7 +6,6 @@ publish_to: none
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
-resolution: workspace
 
 dependencies:
   aws_request:
@@ -16,5 +15,5 @@ dependencies:
   crypto: ^3.0.0 # Message hashes used to collate split messages
 
 dev_dependencies:
-  # test 의존성은 워크스페이스 호환성을 위해 제거. 필요시 로컬에서 추가하여 사용.
-  # test: ^1.24.0
+  # 워크스페이스 비회원 패키지라 여기서 해석됨(루트 pubspec.lock과 별도).
+  test: ^1.28.0
